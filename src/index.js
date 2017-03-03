@@ -11,11 +11,13 @@ import Single from './components/Single';
 import PhotoGrid from './components/PhotoGrid';
 
 // Import react router dependencies
-import { Router, Route, IndexRoute, borwserHistory } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
+import { Provider } from 'react-redux';
+import store, { history } from './store';
 
 const router = (
-  <Provider>
-    <Router history={browserHistory}>
+  <Provider store={store}>
+    <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={PhotoGrid}></IndexRoute>
         <Route path="/view/:postId" component={Single}></Route>
