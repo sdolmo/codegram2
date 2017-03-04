@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 // import styles
+import css from './styles/style.styl'
 
 // Import components
 import App from './components/App';
