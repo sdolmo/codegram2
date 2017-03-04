@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "css-loader": "^0.26.1",
     "path": "^0.12.7",
     "react": "15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "^5.0.3",
     "react-router-redux": "^4.0.8",

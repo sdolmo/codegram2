@@ -80,7 +80,10 @@ module.exports = {
       'react-native': 'react-native-web'
     }
   },
-
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ],
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
