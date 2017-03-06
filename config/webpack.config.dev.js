@@ -109,7 +109,8 @@ module.exports = {
           /\.(js|jsx)$/,
           /\.css$/,
           /\.json$/,
-          /\.svg$/
+          /\.svg$/,
+          /\.styl$/
         ],
         loader: 'url',
         query: {
@@ -137,8 +138,11 @@ module.exports = {
       // in development "style" loader enables hot editing of CSS.
       {
         test: /\.styl$/,
-        include: path.join(__dirname, 'src'),
         loader: 'style-loader!css-loader!stylus-loader'
+      },
+      {
+        test: /\.css$/,
+        loader: 'style!css?importLoaders=1!postcss'
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
