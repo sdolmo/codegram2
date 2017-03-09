@@ -1,18 +1,51 @@
-var mysql = require('mysql');
+var mysql = require('mysql'),
+    async = require('async');
 
-// create connection to db
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'sylvia',
-  password: 'Chobits',
-  database: 'sitepoint'
-});
+var TEST_DB = 'sitepoint';
 
-connection.connect(function(err) {
-  if (err) {
-    console.error('error connecting: ' + err.stack) ;
-    return;
-  }
+exports.MODE_TEST = 'mode_test';
 
-  console.log('connected as id ' + connection.threadId);
-});
+var state = {
+  pool: null,
+  mode: null
+}
+
+exports.connect = function(mode, done) {
+  state.pool = mysql.createPool({
+    host: 'localhost',
+    user: 'sylvia',
+    password: 'Chobits',
+    database: mode === exports.MODE_TEST ? TEST_DB : null
+  })
+
+  state.mode = mode
+  done()
+}
+
+exports.get = function() {
+  return state.pool
+}
+
+exports.fixtures = function(data) {
+  var pool = state.pool
+  if (!pool) return done(new Error('Missing database connection.'))
+
+  var names = Object.keys(data.tables)
+  async.each(names, function(name, cd) {
+    async.each(data.tables[name], function(row, cb) {
+      var keys = Object.keys(row)
+      , values = keys.map(function(key) { return "'" + row[key] + "'" })
+
+      pool.query('INSERT INTO ' + name + ' ( ' + keys.join(',') + ' ) VALUES (' + values.join(',') + ')', cb)
+    }, cb)
+  }, done)
+}
+
+exports.drop = function(tables, done) {
+  var pool = state.pool
+  if (!pool) return done(new Error('Missing database connection.'))
+
+  async.each(tables, function(name, cb) {
+    pool.query('DELETE * FROM ' + name, cb)
+  }, done)
+}
